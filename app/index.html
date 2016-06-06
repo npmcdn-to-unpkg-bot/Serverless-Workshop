@@ -1,0 +1,190 @@
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Workshop</title>
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css"  type='text/css' />
+    <link rel="stylesheet" href="/bower_components/bootstrap-select/dist/css/bootstrap-select.css"  type='text/css' />
+    <link href="styles/fine-uploader.css" rel='stylesheet' type='text/css' />
+    <link href="styles/fineuploader-custom.css" rel='stylesheet' type='text/css' />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+
+    <script>
+        var AppGlobals = {};
+        AppGlobals.BucketUrl = 'https://rpw-workshop.s3.amazonaws.com';
+        AppGlobals.Bucket = 'rpw-workshop';
+        AppGlobals.BucketRegion = 'ap-southeast-2';
+        AppGlobals.FacebookID = '1644700339188385';
+        AppGlobals.CognitoIdentityPoolId = 'us-east-1:387b4b7d-23a5-4829-9ca4-42452f6bc9d8';
+        AppGlobals.CognitoRegion = 'us-east-1';
+    </script>
+
+      
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="/bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+    
+    <!-- build:js scripts/vendor/aws-sdk.js -->
+    <script src="/bower_components/aws-sdk/dist/aws-sdk.js"></script>
+    <!-- endbuild -->
+
+    <script type="text/template" id="qq-template">
+        <div class="qq-uploader-selector qq-uploader">
+            <div class="qq-upload-button-selector qq-upload-button">
+                <div>Select Files</div>
+            </div>
+            <div class="qq-upload-drop-area-selector uploader-drop-zone">
+                <span class="drop-zone-text">Drop Files Here</span>
+                <ul class="qq-upload-list-selector qq-upload-list">
+                    <li class="file-container">
+                        <div class="qq-progress-bar-container-selector">
+                            <div class="qq-progress-bar-selector qq-progress-bar"></div>
+                        </div>
+                        <div class="file-info">
+                            <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                            <img class="qq-thumbnail-selector" qq-max-size="50" qq-server-scale>
+                            <span class="qq-upload-file-selector qq-upload-file"></span>
+                            <span class="qq-upload-size-selector qq-upload-size"></span>
+                        </div>
+                        <button class="qq-upload-cancel-selector qq-upload-cancel" href="#">Cancel</button>
+                        <button class="qq-upload-retry-selector qq-upload-retry" href="#">Retry</button>
+                        <span class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                        <a class="view-btn" target="_blank" style="display: none;">
+                            <input type="button" value="View">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <span class="qq-drop-processing-selector qq-drop-processing">
+                <span>Processing dropped files...</span>
+                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+            </span>
+        </div>
+    </script>       
+</head>
+  <body>
+      <div class="container">
+        <div class="wrapper">
+            <h2 class="app-title">Video Transcoder Application (Workshop)</h2>
+
+            <!-- Only lods the content between the "if tags" if you are not running IE9 or older -->
+            <!--[if !IE | gt IE 9]> -->
+            <div id="amazon-root"></div>
+            <div id="fb-root"></div>
+            <div class="row-fluid">
+                <div class="span8">
+                    <div class="sign-in-buttons">
+                        <!-- Facebook sign-in button -->
+                        <a href="#" id="facebook-signin" class="signin-button">
+                            Facebook Login      
+                        </a>
+                        <div id="loginName"></div>
+                    </div>
+                </div>
+                <br/><br/><br/><br/>
+                <div class="container">
+                <div id="hiddenItems">
+                    <div id="exTab" class="container">	
+                        <ul  class="nav nav-pills">
+			             <li class="active"><a  href="#1b" data-toggle="tab">Overview</a></li>
+			             <li><a href="#2b" data-toggle="tab">Upload Files</a></li>
+			             <li><a href="#3b" data-toggle="tab">Manage Files</a></li>
+		                </ul>
+                        <div class="tab-content clearfix">
+                            <div class="tab-pane active" id="1b">
+                                <p>This is a demonstration application that allows you to:</p>
+                                <ol>
+                                    <li>Upload a media file into an Amazon S3 bucket.
+                                    <li>Re-encode the file using Amazon Elastic Transcoder service.
+                                    <li>Access the transcoded file.
+                                    <li>Optionally remove the media.
+                                </ol>
+                                <p class="center"><img src="images/project.png"></p>
+                            </div>
+                            <div class="tab-pane" id="2b">
+                            <p>Upload media files to Amazon S3</p>
+                            <div id="uploader"></div>
+                            </div>
+                            <div class="tab-pane" id="3b">
+                            <div id="files-list">Please wait, loading...</div>
+                                <a href="#" onclick="getFileList()"><span id="filesRefresh" class="glyphicon glyphicon-refresh"></span></a> 
+                                <select class="selectpicker" id="fileAction" title="Select Action...">
+                                    <option value="encode">Encode selected file(s)</option>
+                                    <option value="delete">Delete selected file(s)</option>
+                                </select>
+                                <select class="selectpicker" id="encodeOption" title="Select Encoding...">
+                                    <option value="encode">To 360p (16:9)</option>
+                                    <option value="delete">To 720p (16:9)</option>
+                                </select>
+                                <button class="btn" id="performAction">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <!-- <![endif]-->
+            <!-- Displayed in place of login buttons & uploader if the browser is IE9 or older. -->
+            <!--[if lt IE 10]>
+            <div>Sorry, this demo is only functional in modern browsers, such as IE10+, Chrome, Firefox, Opera, and Safari.</div>
+            <![endif]-->
+        </div>    
+      </div>    
+    </div>   
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:js scripts/plugins.js -->
+    <script src="/bower_components/bootstrap/js/affix.js"></script>
+    <script src="/bower_components/bootstrap/js/alert.js"></script>
+    <script src="/bower_components/bootstrap/js/dropdown.js"></script>
+    <script src="/bower_components/bootstrap/js/tooltip.js"></script>
+    <script src="/bower_components/bootstrap/js/modal.js"></script>
+    <script src="/bower_components/bootstrap/js/transition.js"></script>
+    <script src="/bower_components/bootstrap/js/button.js"></script>
+    <script src="/bower_components/bootstrap/js/popover.js"></script>
+    <script src="/bower_components/bootstrap/js/carousel.js"></script>
+    <script src="/bower_components/bootstrap/js/scrollspy.js"></script>
+    <script src="/bower_components/bootstrap/js/tab.js"></script>
+    <script src="/bower_components/bootstrap/js/collapse.js"></script>  
+    <script src="/bower_components/bootstrap-select/js/bootstrap-select.js"></script>  
+    <!-- endbuild -->
+    <!-- build:js scripts/main.js -->
+    <script src="scripts/main.js"></script>
+    <script src="scripts/s3.jquery.fine-uploader.js"></script>
+    <script src="scripts/aws-sdk-glue.js"></script>
+    <script src="scripts/facebook-auth.js"></script>
+    <script src="scripts/fineuploader-glue.js"></script>
+    <!-- endbuild -->      
+    <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
+    <!-- build:js scripts/vendor/apigateway.js -->
+    <script type="text/javascript" src="scripts/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="scripts/lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="scripts/lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="scripts/lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="scripts/lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="scripts/lib/apigatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="scripts/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="scripts/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="scripts/lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="scripts/apigClient.js"></script>      
+    <!-- endbuild -->           
+      
+      
+  </body>
+</html>

@@ -10,7 +10,7 @@ This is a project for a workshop.
         Use the AWS Cli script to create your environment.
 4. Build using:
 ```
-glup
+gulp
 ```
 5. Test using:
 ```

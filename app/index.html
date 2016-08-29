@@ -40,6 +40,12 @@
     <!-- build:js scripts/vendor/aws-sdk.js -->
     <script src="/bower_components/aws-sdk/dist/aws-sdk.js"></script>
     <!-- endbuild -->
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+       
 
     <script type="text/template" id="qq-template">
         <div class="qq-uploader-selector qq-uploader">
@@ -78,31 +84,37 @@
   <body>
       <div class="container">
         <div class="wrapper">
-            <h2 class="app-title">Video Transcoder Application (Workshop)</h2>
-
-            <!-- Only lods the content between the "if tags" if you are not running IE9 or older -->
-            <!--[if !IE | gt IE 9]> -->
-            <div id="amazon-root"></div>
-            <div id="fb-root"></div>
-            <div class="row-fluid">
-                <div class="span8">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="app-title">Video Transcoder Application</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="amazon-root"></div>
+                    <div id="fb-root"></div>
                     <div class="sign-in-buttons">
                         <!-- Facebook sign-in button -->
+                        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
                         <a href="#" id="facebook-signin" class="signin-button">
                             Facebook Login      
                         </a>
                         <div id="loginName"></div>
                     </div>
                 </div>
-                <br/><br/><br/><br/>
-                <div class="container">
-                <div id="hiddenItems">
-                    <div id="exTab" class="container">	
-                        <ul  class="nav nav-pills">
-			             <li class="active"><a  href="#1b" data-toggle="tab">Overview</a></li>
-			             <li><a href="#2b" data-toggle="tab">Upload Files</a></li>
-			             <li><a href="#3b" data-toggle="tab">Manage Files</a></li>
-		                </ul>
+            </div>
+
+            <!-- Only lods the content between the "if tags" if you are not running IE9 or older -->
+            <!--[if !IE | gt IE 9]> -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="hiddenItems">
+                        <div id="exTab">	
+                            <ul  class="nav nav-pills">
+                                <li class="active"><a  href="#1b" data-toggle="tab" class="tabButton">Overview</a></li>
+                                <li><a href="#2b" data-toggle="tab" class="tabButton">Upload Files</a></li>
+                                <li><a href="#3b" data-toggle="tab" class="tabButton">Manage Files</a></li>
+                            </ul>
                         <div class="tab-content clearfix">
                             <div class="tab-pane active" id="1b">
                                 <p>This is a demonstration application that allows you to:</p>
@@ -112,24 +124,24 @@
                                     <li>Access the transcoded file.
                                     <li>Optionally remove the media.
                                 </ol>
-                                <p class="center"><img src="images/project.png"></p>
+                                <p class="center"><a href="images/project.png" target="_blank"><img src="images/project.png" width="50px"></a></p>
                             </div>
                             <div class="tab-pane" id="2b">
                             <p>Upload media files to Amazon S3</p>
                             <div id="uploader"></div>
                             </div>
                             <div class="tab-pane" id="3b">
-                            <div id="files-list">Please wait, loading...</div>
-                                <a href="#" onclick="getFileList()"><span id="filesRefresh" class="glyphicon glyphicon-refresh"></span></a> 
+                                <div id="files-list">Please wait, loading...</div>
+                                <a href="#" onclick="getFileList()"><span id="filesRefresh" class="glyphicon glyphicon-refresh"></span></a> &nbsp;&nbsp;
                                 <select class="selectpicker" id="fileAction" title="Select Action...">
                                     <option value="encode">Encode selected file(s)</option>
                                     <option value="delete">Delete selected file(s)</option>
-                                </select>
+                                </select>&nbsp;&nbsp;
                                 <select class="selectpicker" id="encodeOption" title="Select Encoding...">
                                     <option value="encode">To 360p (16:9)</option>
                                     <option value="delete">To 720p (16:9)</option>
-                                </select>
-                                <button class="btn" id="performAction">Submit</button>
+                                </select>&nbsp;&nbsp;
+                                <button class="btn submit-button" id="performAction">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -144,11 +156,7 @@
         </div>    
       </div>    
     </div>   
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
+
     <!-- build:js scripts/plugins.js -->
     <script src="/bower_components/bootstrap/js/affix.js"></script>
     <script src="/bower_components/bootstrap/js/alert.js"></script>
@@ -183,8 +191,6 @@
     <script type="text/javascript" src="scripts/lib/apiGatewayCore/simpleHttpClient.js"></script>
     <script type="text/javascript" src="scripts/lib/apiGatewayCore/utils.js"></script>
     <script type="text/javascript" src="scripts/apigClient.js"></script>      
-    <!-- endbuild -->           
-      
-      
+    <!-- endbuild -->    
   </body>
 </html>

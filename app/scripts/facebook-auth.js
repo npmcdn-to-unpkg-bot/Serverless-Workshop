@@ -66,7 +66,7 @@ $(function() {
                         setTimeout(function() {
                             alert('Token expired. You must sign in again.');
                             $(document).trigger('tokenExpired.s3');
-                        }, expiresInMs - 10000)
+                        }, expiresInMs - 100000)
                     }());
                 }
             }

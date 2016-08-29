@@ -11,11 +11,14 @@ See the HTML file comments for more details.
 {
     text-align: center;
     font-weight: 200;
-    margin-top: 0px;
-    margin-bottom: 40px;
-    color: #444477;
-    font-size: 36px;
-    font-family:serif;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: ghostwhite;
+    font-size: 28px;
+    font-family: Arial, Helvetica, sans-serif;
+    background:   #337ab7;
+    border-radius: 5px;
+    padding: 15px; 
 }
 
 .uploader-drop-zone
